@@ -9,31 +9,10 @@
 #include <sys/socket.h>
 #include <netinet/ip.h>
 
+#include "server_utils.h"
+
 #define PORT 5050
 #define MAX_CONNECTIONS 10
-
-static void msg(const char *msg) {
-    fprintf(stderr, "%s\n", msg);
-}
-
-static void die(const char *msg) {
-    int err = errno;
-    fprintf(stderr, "[%d] %s\n", err, msg);
-    abort();
-}
-
-static void do_something(int connfd) {
-    char rbuf[64] = {};
-    ssize_t n = read(connfd, rbuf, sizeof(rbuf) - 1);
-    if (n < 0) {
-        msg("read() error");
-        return;
-    }
-    printf("client says: %s\n", rbuf);
-
-    char wbuf[] = "world";
-    write(connfd, wbuf, strlen(wbuf));
-}
 
 int main() {
     int fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -66,14 +45,15 @@ int main() {
     while (true) {
         // accept
         struct sockaddr_in client_addr = {};
-        socklen_t socklen = sizeof(client_addr);
-        int connfd = accept(fd, (struct sockaddr *)&client_addr, &socklen);
-        if (connfd < 0) {
+        socklen_t sock_len = sizeof(client_addr);
+        int conn_fd = accept(fd, (struct sockaddr *)&client_addr, &sock_len);
+        if (conn_fd < 0) {
             continue;   // error
         }
 
-        do_something(connfd);
-        close(connfd);
+        do_something(conn_fd);
+
+        close(conn_fd);
     }
 
     return 0;

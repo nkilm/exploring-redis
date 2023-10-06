@@ -1,3 +1,17 @@
+# Compiled object files
+*.o
+
+# Executable files
 server
 client
-a.out
+*.out
+*.exe
+
+# Compiled dynamic libraries
+*.so
+
+# Compiled static libraries
+*.a
+
+# Visual Studio Code settings
+.vscode/
