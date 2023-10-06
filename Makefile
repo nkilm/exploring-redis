@@ -1,13 +1,16 @@
-.PHONEY: clean
-all:
-	make server
-	make client
+CC = gcc
+CFLAGS = -Wall -Wextra
+TARGETS = server client
 
-server:
-	gcc -Wall -Wextra server.c -o server
+.PHONY: all clean
 
-client:
-	gcc -Wall -Wextra client.c -o client
+all: $(TARGETS)
+
+server: server.c
+	$(CC) $(CFLAGS) $< -o $@
+
+client: client.c
+	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm -rf *.out server client
+	rm -rf $(TARGETS)
