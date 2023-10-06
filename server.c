@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <errno.h>
-#include<stdbool.h>
+#include <stdbool.h>
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
@@ -54,12 +54,14 @@ int main() {
     if (rv) {
         die("bind()");
     }
+    printf("---Server started on PORT %d---\n\n", PORT);
 
     // listen
     rv = listen(fd, MAX_CONNECTIONS);
     if (rv) {
         die("listen()");
     }
+
 
     while (true) {
         // accept
