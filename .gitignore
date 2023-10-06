@@ -2,8 +2,8 @@
 *.o
 
 # Executable files
-server
-client
+client/client
+server/server
 *.out
 *.exe
 
