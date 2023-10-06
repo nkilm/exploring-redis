@@ -1,13 +1,13 @@
 CC = gcc
-CFLAGS = -Wall -Wextra
+CFLAGS = -Wall -Wextra -Wunused
 TARGETS = server client
 
 .PHONY: all clean
 
 all: $(TARGETS)
 
-server: server.c
-	$(CC) $(CFLAGS) $< -o $@
+server: server.c server_utils.c
+	$(CC) $(CFLAGS) $^ -o $@
 
 client: client.c
 	$(CC) $(CFLAGS) $< -o $@
