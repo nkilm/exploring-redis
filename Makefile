@@ -6,11 +6,12 @@ TARGETS = server client
 
 all: $(TARGETS)
 
-server: server.c server_utils.c
-	$(CC) $(CFLAGS) $^ -o $@
+server:
+	$(MAKE) -C server
 
-client: client.c
-	$(CC) $(CFLAGS) $< -o $@
+client:
+	$(MAKE) -C client
 
 clean:
-	rm -rf $(TARGETS)
+	$(MAKE) -C server clean
+	$(MAKE) -C client clean
