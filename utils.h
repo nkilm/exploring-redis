@@ -4,7 +4,6 @@
 #include <stdint.h>
 
 #define PORT 5050 // server's PORT number
-#define k_max_msg 4096
 
 void msg(const char *);
 void die(const char *);

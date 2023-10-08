@@ -1,6 +1,8 @@
 #include <stdint.h>
+#include <vector>
 
 #define MAX_CONNECTIONS 10
+#define k_max_msg 4096
 
 // all possible states for fd
 enum
@@ -29,3 +31,6 @@ struct Conn
 int32_t one_request(int fd);
 
 void fd_set_nb(int fd); // set fd to non-blocking mode
+
+int32_t accept_new_conn(std::vector<Conn *> &fd2conn, int fd);
+void connection_io(Conn *conn);
