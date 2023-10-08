@@ -65,17 +65,30 @@ int32_t query(int fd, const char *text)
     return 0;
 }
 
-int32_t send_req(int fd, const char *text)
+int32_t send_req(int fd, const std::vector<std::string> &cmd)
 {
-    uint32_t len = (uint32_t)strlen(text);
+    uint32_t len = 4;
+    for (const std::string &s : cmd)
+    {
+        len += 4 + s.size();
+    }
     if (len > k_max_msg)
     {
         return -1;
     }
 
     char wbuf[4 + k_max_msg];
-    memcpy(wbuf, &len, 4); // assume little endian
-    memcpy(&wbuf[4], text, len);
+    memcpy(&wbuf[0], &len, 4); // assume little endian
+    uint32_t n = cmd.size();
+    memcpy(&wbuf[4], &n, 4);
+    size_t cur = 8;
+    for (const std::string &s : cmd)
+    {
+        uint32_t p = (uint32_t)s.size();
+        memcpy(&wbuf[cur], &p, 4);
+        memcpy(&wbuf[cur + 4], s.data(), s.size());
+        cur += 4 + s.size();
+    }
     return write_full(fd, wbuf, 4 + len);
 }
 
@@ -114,8 +127,14 @@ int32_t read_res(int fd)
         return err;
     }
 
-    // do something
-    rbuf[4 + len] = '\0';
-    printf("server says: %s\n", &rbuf[4]);
+    // print the result
+    uint32_t rescode = 0;
+    if (len < 4)
+    {
+        msg("bad response");
+        return -1;
+    }
+    memcpy(&rescode, &rbuf[4], 4);
+    printf("server says: [%u] %.*s\n", rescode, len - 4, &rbuf[8]);
     return 0;
 }

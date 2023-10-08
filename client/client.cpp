@@ -7,11 +7,13 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <netinet/ip.h>
+#include <vector>
+#include <string>
 
 #include "../utils.h"
 #include "client_utils.h"
 
-int main()
+int main(int argc, char **argv)
 {
     int fd = socket(AF_INET, SOCK_STREAM, 0);
     if (fd < 0)
@@ -59,6 +61,8 @@ int main()
         goto L_DONE;
 
     */
+
+    /*
     // multiple pipelined requests
     const char *query_list[3] = {"hello1", "hello2", "hello3"};
     for (size_t i = 0; i < 3; ++i)
@@ -76,6 +80,23 @@ int main()
         {
             goto L_DONE;
         }
+    }
+    */
+
+    std::vector<std::string> cmd;
+    for (int i = 1; i < argc; ++i)
+    {
+        cmd.push_back(argv[i]);
+    }
+    int32_t err = send_req(fd, cmd);
+    if (err)
+    {
+        goto L_DONE;
+    }
+    err = read_res(fd);
+    if (err)
+    {
+        goto L_DONE;
     }
 
 L_DONE:
