@@ -7,7 +7,7 @@ TARGET = server
 all: $(TARGET)
 
 # utils.c is present one level above so ../ is used
-$(TARGET): server.c server_utils.c ../utils.c
+$(TARGET): server.cpp server_utils.cpp ../utils.cpp
 	$(CC) $(CFLAGS) $^ -o $@
 
 clean:
