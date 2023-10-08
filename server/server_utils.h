@@ -4,7 +4,6 @@
 #include <string>
 
 #define MAX_CONNECTIONS 10
-#define k_max_msg 4096
 #define k_max_args 1024 // max number of arguments/queries
 
 // all possible states for fd
