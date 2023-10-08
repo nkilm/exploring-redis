@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
+#include <fcntl.h>
 
 #include "../utils.h"
 #include "server_utils.h"
@@ -74,4 +75,24 @@ int32_t one_request(int fd)
     memcpy(&wbuf[4], reply, len);
 
     return write_full(fd, wbuf, 4 + len);
+}
+
+void fd_set_nb(int fd)
+{
+    errno = 0;
+    int flags = fcntl(fd, F_GETFL, 0); // fetch current flags
+    if (errno)
+    {
+        die("fcntl error");
+        return;
+    }
+
+    flags |= O_NONBLOCK; // fet non-blocking flag to true
+
+    errno = 0;
+    (void)fcntl(fd, F_SETFL, flags);
+    if (errno)
+    {
+        die("fcntl error");
+    }
 }

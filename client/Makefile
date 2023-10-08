@@ -7,7 +7,7 @@ TARGET = client
 all: $(TARGET)
 
 # utils.c is present one level above so ../ is used
-$(TARGET): client.c client_utils.c ../utils.c
+$(TARGET): client.cpp client_utils.cpp ../utils.cpp
 	$(CC) $(CFLAGS) $^ -o $@
 
 clean:
