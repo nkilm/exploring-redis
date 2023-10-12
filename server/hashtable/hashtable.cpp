@@ -163,3 +163,8 @@ void hm_destroy(HMap *hmap)
     free(hmap->ht2.tab);
     *hmap = HMap{};
 }
+
+size_t hm_size(HMap *hmap)
+{
+    return hmap->ht1.size + hmap->ht2.size;
+}
