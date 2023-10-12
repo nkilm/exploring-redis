@@ -42,6 +42,19 @@ struct Conn
     uint8_t wbuf[4 + k_max_msg];
 };
 
+// Serialization
+enum
+{
+    ERR_UNKNOWN = 1,
+    ERR_2BIG = 2,
+};
+
+void out_nil(std::string &out);
+void out_str(std::string &out, const std::string &val);
+void out_int(std::string &out, int64_t val);
+void out_err(std::string &out, int32_t code, const std::string &msg);
+void out_arr(std::string &out, uint32_t n);
+
 /*
 
 // The data structure for the key space. We'll be replaced with actual Hashmap
@@ -57,7 +70,8 @@ int32_t accept_new_conn(std::vector<Conn *> &fd2conn, int fd);
 void connection_io(Conn *conn);
 
 /*
-// CRUD operation for map - get, set, del
+// CRUD operation for map<string, string> - get, set, del
+
 static uint32_t do_get(
     const std::vector<std::string> &cmd, uint8_t *res, uint32_t *reslen);
 
@@ -87,6 +101,7 @@ struct Entry
     std::string val;
 };
 
+/*
 // updated definitions for get, set, del
 uint32_t do_get(
     std::vector<std::string> &cmd, uint8_t *res, uint32_t *reslen);
@@ -96,3 +111,11 @@ uint32_t do_set(
 
 uint32_t do_del(
     std::vector<std::string> &cmd, uint8_t *res, uint32_t *reslen);
+*/
+
+// With data serialization
+void do_get(std::vector<std::string> &cmd, std::string &out);
+void do_set(std::vector<std::string> &cmd, std::string &out);
+void do_del(std::vector<std::string> &cmd, std::string &out);
+
+void h_scan(HTab *tab, void (*f)(HNode *, void *), void *arg);
