@@ -246,6 +246,18 @@ int32_t on_response(const uint8_t *data, size_t size)
             printf("(int) %ld\n", val);
             return 1 + 8;
         }
+    case SER_DBL:
+        if (size < 1 + 8)
+        {
+            msg("bad response");
+            return -1;
+        }
+        {
+            double val = 0;
+            memcpy(&val, &data[1], 8);
+            printf("(dbl) %g\n", val);
+            return 1 + 8;
+        }
     case SER_ARR:
         if (size < 1 + 4)
         {
