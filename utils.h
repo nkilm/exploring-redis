@@ -9,11 +9,12 @@
 // different datatypes
 enum
 {
-    SER_NIL = 0, // like NULL
-    SER_ERR = 1, // error
-    SER_STR = 2, // string
-    SER_INT = 3, // integer
-    SER_ARR = 4, // array
+    SER_NIL = 0,
+    SER_ERR = 1,
+    SER_STR = 2,
+    SER_INT = 3,
+    SER_DBL = 4,
+    SER_ARR = 5,
 };
 
 void msg(const char *);

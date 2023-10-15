@@ -3,13 +3,12 @@
 #include <map>
 #include <string>
 
-#include "./hashtable/hashtable.h"
+#include "common.h"
+// #include "./hashtable/hashtable.h"
+#include "./zset/zset.h"
 
 #define MAX_CONNECTIONS 10
 #define k_max_args 1024 // max number of arguments/queries
-#define container_of(ptr, type, member) ({                  \
-    const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
-    (type *)( (char *)__mptr - offsetof(type, member) ); })
 
 // all possible states for fd
 enum
@@ -47,6 +46,8 @@ enum
 {
     ERR_UNKNOWN = 1,
     ERR_2BIG = 2,
+    ERR_TYPE = 3,
+    ERR_ARG = 4,
 };
 
 void out_nil(std::string &out);
@@ -93,12 +94,22 @@ struct
     HMap db;
 } g_data;
 
+enum
+{
+    T_STR = 0,
+    T_ZSET = 1,
+};
+
 // the structure for the key
 struct Entry
 {
     struct HNode node;
     std::string key;
     std::string val;
+
+    // Sorted set aka 'zset'
+    uint32_t type = 0;
+    ZSet *zset = NULL;
 };
 
 /*
@@ -119,3 +130,18 @@ void do_set(std::vector<std::string> &cmd, std::string &out);
 void do_del(std::vector<std::string> &cmd, std::string &out);
 
 void h_scan(HTab *tab, void (*f)(HNode *, void *), void *arg);
+
+// zset functions - CRUD + other common utils
+
+// zadd zset score name
+void do_zadd(std::vector<std::string> &cmd, std::string &out);
+
+bool expect_zset(std::string &out, std::string &s, Entry **ent);
+
+void do_zrem(std::vector<std::string> &cmd, std::string &out);
+
+// zscore zset name
+void do_zscore(std::vector<std::string> &cmd, std::string &out);
+
+// zquery zset score name offset limit
+void do_zquery(std::vector<std::string> &cmd, std::string &out);
