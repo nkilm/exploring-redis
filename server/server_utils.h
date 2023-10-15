@@ -4,12 +4,10 @@
 #include <string>
 
 #include "./hashtable/hashtable.h"
+#include "common.h"
 
 #define MAX_CONNECTIONS 10
 #define k_max_args 1024 // max number of arguments/queries
-#define container_of(ptr, type, member) ({                  \
-    const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
-    (type *)( (char *)__mptr - offsetof(type, member) ); })
 
 // all possible states for fd
 enum
@@ -47,6 +45,8 @@ enum
 {
     ERR_UNKNOWN = 1,
     ERR_2BIG = 2,
+    ERR_TYPE = 3,
+    ERR_ARG = 4,
 };
 
 void out_nil(std::string &out);
@@ -93,12 +93,22 @@ struct
     HMap db;
 } g_data;
 
+enum
+{
+    T_STR = 0,
+    T_ZSET = 1,
+};
+
 // the structure for the key
 struct Entry
 {
     struct HNode node;
     std::string key;
     std::string val;
+
+    // Sorted set aka 'zset'
+    uint32_t type = 0;
+    ZSet *zset = NULL;
 };
 
 /*
