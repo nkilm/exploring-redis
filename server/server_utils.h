@@ -3,8 +3,9 @@
 #include <map>
 #include <string>
 
-#include "./hashtable/hashtable.h"
 #include "common.h"
+// #include "./hashtable/hashtable.h"
+#include "./zset/zset.h"
 
 #define MAX_CONNECTIONS 10
 #define k_max_args 1024 // max number of arguments/queries
@@ -129,3 +130,18 @@ void do_set(std::vector<std::string> &cmd, std::string &out);
 void do_del(std::vector<std::string> &cmd, std::string &out);
 
 void h_scan(HTab *tab, void (*f)(HNode *, void *), void *arg);
+
+// zset functions - CRUD + other common utils
+
+// zadd zset score name
+void do_zadd(std::vector<std::string> &cmd, std::string &out);
+
+bool expect_zset(std::string &out, std::string &s, Entry **ent);
+
+void do_zrem(std::vector<std::string> &cmd, std::string &out);
+
+// zscore zset name
+void do_zscore(std::vector<std::string> &cmd, std::string &out);
+
+// zquery zset score name offset limit
+void do_zquery(std::vector<std::string> &cmd, std::string &out);
