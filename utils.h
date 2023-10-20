@@ -3,8 +3,7 @@
 
 #include <stdint.h>
 
-#define PORT 5050      // server's PORT number
-#define k_max_msg 4096 // maximum message size
+#define PORT 5050 // server's PORT number
 
 // different datatypes
 enum
