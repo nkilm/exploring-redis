@@ -178,6 +178,7 @@ static void out_update_arr(std::string &out, uint32_t n)
     assert(out[0] == SER_ARR);
     memcpy(&out[1], &n, 4);
 }
+static void entry_set_ttl(Entry *ent, int64_t ttl_ms);
 
 static void do_get(std::vector<std::string> &cmd, std::string &out)
 {
@@ -196,6 +197,23 @@ static void do_get(std::vector<std::string> &cmd, std::string &out)
     {
         return out_err(out, ERR_TYPE, "expect string type");
     }
+
+    // Check if the TTL is expired
+    if (ent->heap_idx != (size_t)-1)
+    {
+        uint64_t now_us = get_monotonic_usec();
+        uint64_t expire_at = g_data.heap[ent->heap_idx].val;
+
+        if (now_us >= expire_at)
+        {
+            // TTL is expired, delete the entry
+            entry_set_ttl(ent, -1);
+            hm_pop(&g_data.db, &key.node, &entry_eq);
+            entry_del(ent);
+            return out_nil(out);
+        }
+    }
+
     return out_str(out, ent->val);
 }
 
