@@ -215,6 +215,7 @@ int main()
     thread_pool_init(&g_data.tp, 4);
 
     std::vector<struct pollfd> poll_args;
+    printf("> Server started on PORT %d\n\n", PORT);
     while (true)
     {
 
