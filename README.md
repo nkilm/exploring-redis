@@ -1,4 +1,6 @@
 # Exploring Redis
+![exploring-redis](https://github.com/nkilm/exploring-redis/assets/79012023/d6577c95-16a6-4c6b-bc98-8130830e98f8)
+
 Redis is an in-memory datastore which is an acronym for **Remote Dictionary Server**. It is used as a database, cache, streaming engine, and message broker.
 
 Official docs - [https://redis.io/](https://redis.io/)
